@@ -1,5 +1,7 @@
 # stm32-blackpill-rtc
 
+![Display](assets/display.jpg)
+
 A real-time clock display built on the STM32F411CEU6 (BlackPill) using a DS3231 RTC module and a 1602A LCD with I2C backpack.
 
 Reads time and date from the DS3231 over I2C and displays it on the LCD. Two buttons let you cycle through and edit each field directly on the device — no USB required after flashing.
@@ -20,6 +22,8 @@ Reads time and date from the DS3231 over I2C and displays it on the LCD. Two but
 - 2× tactile buttons (MODE, UP)
 
 ## Wiring
+
+![Wiring](assets/board_wiring.jpg)
 
 | Signal     | BlackPill Pin |
 |------------|---------------|
