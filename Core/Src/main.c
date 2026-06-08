@@ -184,7 +184,20 @@ int main(void) {
       if (Button_Pressed(BUTTON_MODE) == 1) {
         curr_state += 1;
       } else if (Button_Pressed(BUTTON_UP) == 1) {
-        rtc.date = (rtc.date % 31) + 1;
+        if (rtc.month == 2) {
+          if (rtc.year % 4 == 0) {
+            rtc.date = (rtc.date % 29) + 1;
+          } else {
+
+            rtc.date = (rtc.date % 28) + 1;
+          }
+        } else if (rtc.month == 4 || rtc.month == 6 || rtc.month == 9 ||
+                   rtc.month == 11) {
+
+          rtc.date = (rtc.date % 30) + 1;
+        } else {
+          rtc.date = (rtc.date % 31) + 1;
+        }
         DS3231_Write(&rtc);
       }
       break;
@@ -199,7 +212,7 @@ int main(void) {
         curr_state = 0;
         LCD_Clear();
       } else if (Button_Pressed(BUTTON_UP) == 1) {
-        rtc.year = (rtc.year + 1) % 99;
+        rtc.year = (rtc.year + 1) % 100;
         DS3231_Write(&rtc);
       }
       break;
