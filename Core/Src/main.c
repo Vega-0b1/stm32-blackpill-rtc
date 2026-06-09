@@ -114,6 +114,38 @@ int main(void) {
     switch (curr_state) {
     case 0:
       DS3231_Read(&rtc);
+      if (rtc.hours == 0 && rtc.minutes == 0 && rtc.seconds == 0) {
+
+        if (rtc.month == 2) {
+          if (rtc.year % 4 == 0 && rtc.date > 29) {
+            rtc.month = 3;
+            rtc.date = 1;
+            DS3231_Write(&rtc);
+          } else if (rtc.date > 28) {
+            rtc.month = 3;
+            rtc.date = 1;
+            DS3231_Write(&rtc);
+          }
+        } else if (rtc.month == 4 || rtc.month == 6 || rtc.month == 9 ||
+                   rtc.month == 11) {
+          if (rtc.date > 30) {
+            rtc.month += 1;
+            rtc.date = 1;
+            DS3231_Write(&rtc);
+          }
+
+        } else {
+          if (rtc.month == 12 && rtc.date > 31) {
+            rtc.month = 1;
+            rtc.date = 1;
+            DS3231_Write(&rtc);
+          } else if (rtc.date > 31) {
+            rtc.month += 1;
+            rtc.date = 1;
+            DS3231_Write(&rtc);
+          }
+        }
+      }
       LCD_Print_Rtc(&rtc, curr_state);
       if (Button_Pressed(BUTTON_MODE) == 1)
         curr_state += 1;
@@ -333,7 +365,8 @@ static void MX_GPIO_Init(void) {
  */
 void Error_Handler(void) {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state
+  /* User can add his own implementation to report the HAL error return
+   * state
    */
   __disable_irq();
   while (1) {
