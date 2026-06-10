@@ -48,7 +48,6 @@ I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
 DS3231_Time rtc;
-DS3231_Time temp;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -164,59 +163,14 @@ int main(void) {
       break;
 
     case 4:
-      DS3231_Read(&temp);
-      rtc.seconds = temp.seconds;
-      rtc.minutes = temp.minutes;
-
-      LCD_Print_Rtc(&rtc, curr_state);
-      if (Button_Pressed(BUTTON_MODE) == 1) {
-        curr_state += 1;
-      } else if (Button_Pressed(BUTTON_UP) == 1) {
-        rtc.month = (rtc.month % 12) + 1;
-        DS3231_Write(&rtc);
-      }
-
+      DS3231_adjust_month(&rtc, &curr_state);
       break;
     case 5:
-      DS3231_Read(&temp);
-      rtc.seconds = temp.seconds;
-      rtc.minutes = temp.minutes;
-
-      LCD_Print_Rtc(&rtc, curr_state);
-      if (Button_Pressed(BUTTON_MODE) == 1) {
-        curr_state += 1;
-      } else if (Button_Pressed(BUTTON_UP) == 1) {
-        if (rtc.month == 2) {
-          if (rtc.year % 4 == 0) {
-            rtc.date = (rtc.date % 29) + 1;
-          } else {
-
-            rtc.date = (rtc.date % 28) + 1;
-          }
-        } else if (rtc.month == 4 || rtc.month == 6 || rtc.month == 9 ||
-                   rtc.month == 11) {
-
-          rtc.date = (rtc.date % 30) + 1;
-        } else {
-          rtc.date = (rtc.date % 31) + 1;
-        }
-        DS3231_Write(&rtc);
-      }
+      DS3231_adjust_date(&rtc, &curr_state);
       break;
 
     case 6:
-      DS3231_Read(&temp);
-      rtc.seconds = temp.seconds;
-      rtc.minutes = temp.minutes;
-
-      LCD_Print_Rtc(&rtc, curr_state);
-      if (Button_Pressed(BUTTON_MODE) == 1) {
-        curr_state = 0;
-        LCD_Clear();
-      } else if (Button_Pressed(BUTTON_UP) == 1) {
-        rtc.year = (rtc.year + 1) % 100;
-        DS3231_Write(&rtc);
-      }
+      DS3231_adjust_year(&rtc, &curr_state);
       break;
     }
   }
