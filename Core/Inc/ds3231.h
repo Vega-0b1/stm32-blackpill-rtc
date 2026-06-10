@@ -14,3 +14,4 @@ void DS3231_Read(DS3231_Time *time);
 void DS3231_Write(DS3231_Time *time);
 void DS3231_adjust_hours(DS3231_Time *rtc, uint8_t *curr_state);
 void DS3231_adjust_minutes(DS3231_Time *rtc, uint8_t *curr_state);
+void DS3231_adjust_seconds(DS3231_Time *rtc, uint8_t *curr_state);

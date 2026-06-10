@@ -48,8 +48,8 @@ void DS3231_adjust_hours(DS3231_Time *rtc, uint8_t *curr_state) {
   DS3231_Read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-
   LCD_Print_Rtc(rtc, *curr_state);
+
   if (Button_Pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
   else if (Button_Pressed(BUTTON_UP) == 1) {
@@ -63,12 +63,27 @@ void DS3231_adjust_minutes(DS3231_Time *rtc, uint8_t *curr_state) {
   DS3231_Read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-
   LCD_Print_Rtc(rtc, *curr_state);
+
   if (Button_Pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
   else if (Button_Pressed(BUTTON_UP) == 1) {
     rtc->minutes = (rtc->minutes + 1) % 60;
+    DS3231_Write(rtc);
+  }
+}
+
+void DS3231_adjust_seconds(DS3231_Time *rtc, uint8_t *curr_state) {
+  DS3231_Time temp;
+  DS3231_Read(&temp);
+  rtc->seconds = temp.seconds;
+  rtc->minutes = temp.minutes;
+  LCD_Print_Rtc(rtc, *curr_state);
+
+  if (Button_Pressed(BUTTON_MODE) == 1)
+    *curr_state += 1;
+  else if (Button_Pressed(BUTTON_UP) == 1) {
+    rtc->seconds = 0;
     DS3231_Write(rtc);
   }
 }
