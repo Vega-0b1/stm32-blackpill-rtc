@@ -152,21 +152,11 @@ int main(void) {
       break;
 
     case 1:
-      DS3231_adjust_hour(&rtc, &curr_state);
+      DS3231_adjust_hours(&rtc, &curr_state);
       break;
 
     case 2:
-      DS3231_Read(&temp);
-      rtc.seconds = temp.seconds;
-      rtc.minutes = temp.minutes;
-
-      LCD_Print_Rtc(&rtc, curr_state);
-      if (Button_Pressed(BUTTON_MODE) == 1) {
-        curr_state += 1;
-      } else if (Button_Pressed(BUTTON_UP) == 1) {
-        rtc.minutes = (rtc.minutes + 1) % 60;
-        DS3231_Write(&rtc);
-      }
+      DS3231_adjust_minutes(&rtc, &curr_state);
       break;
 
     case 3:

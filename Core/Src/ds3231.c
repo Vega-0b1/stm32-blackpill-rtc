@@ -43,7 +43,7 @@ void DS3231_Write(DS3231_Time *time) {
   HAL_I2C_Master_Transmit(&hi2c1, DS3231_ADDR, buf, 8, 100);
 }
 
-void DS3231_adjust_hour(DS3231_Time *rtc, uint8_t *curr_state) {
+void DS3231_adjust_hours(DS3231_Time *rtc, uint8_t *curr_state) {
   DS3231_Time temp;
   DS3231_Read(&temp);
   rtc->seconds = temp.seconds;
@@ -54,6 +54,21 @@ void DS3231_adjust_hour(DS3231_Time *rtc, uint8_t *curr_state) {
     *curr_state += 1;
   else if (Button_Pressed(BUTTON_UP) == 1) {
     rtc->hours = (rtc->hours + 1) % 24;
+    DS3231_Write(rtc);
+  }
+}
+
+void DS3231_adjust_minutes(DS3231_Time *rtc, uint8_t *curr_state) {
+  DS3231_Time temp;
+  DS3231_Read(&temp);
+  rtc->seconds = temp.seconds;
+  rtc->minutes = temp.minutes;
+
+  LCD_Print_Rtc(rtc, *curr_state);
+  if (Button_Pressed(BUTTON_MODE) == 1)
+    *curr_state += 1;
+  else if (Button_Pressed(BUTTON_UP) == 1) {
+    rtc->minutes = (rtc->minutes + 1) % 60;
     DS3231_Write(rtc);
   }
 }
