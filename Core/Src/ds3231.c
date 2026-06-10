@@ -1,6 +1,10 @@
 #include "ds3231.h"
+#include "button.h"
+#include "lcd.h"
+
 #define DS3231_ADDR (0x68 << 1)
 extern I2C_HandleTypeDef hi2c1;
+
 static uint8_t bcd_to_decimal(uint8_t bcd) {
   return (bcd >> 4) * 10 + (bcd & 0x0F);
 }
@@ -37,4 +41,19 @@ void DS3231_Write(DS3231_Time *time) {
   buf[7] = decimal_to_bcd(time->year);
 
   HAL_I2C_Master_Transmit(&hi2c1, DS3231_ADDR, buf, 8, 100);
+}
+
+void DS3231_adjust_hour(DS3231_Time *rtc, uint8_t *curr_state) {
+  DS3231_Time temp;
+  DS3231_Read(&temp);
+  rtc->seconds = temp.seconds;
+  rtc->minutes = temp.minutes;
+
+  LCD_Print_Rtc(rtc, *curr_state);
+  if (Button_Pressed(BUTTON_MODE) == 1)
+    *curr_state += 1;
+  else if (Button_Pressed(BUTTON_UP) == 1) {
+    rtc->hours = (rtc->hours + 1) % 24;
+    DS3231_Write(rtc);
+  }
 }

@@ -12,3 +12,4 @@ typedef struct {
 
 void DS3231_Read(DS3231_Time *time);
 void DS3231_Write(DS3231_Time *time);
+void DS3231_adjust_hour(DS3231_Time *rtc, uint8_t *curr_state);
