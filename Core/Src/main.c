@@ -23,7 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "button.h"
 #include "ds3231.h"
-#include "lcd.h"
+#include "oled.h"
 #include <stdio.h>
 
 /* USER CODE END Includes */
@@ -97,7 +97,7 @@ int main(void) {
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   Button_Init();
-  LCD_Init(&hi2c1);
+  OLED_Init(&hi2c1);
 
   uint8_t curr_state = 0;
 
@@ -145,7 +145,7 @@ int main(void) {
           }
         }
       }
-      LCD_Print_Rtc(&rtc, curr_state);
+      OLED_Print_Rtc(&rtc, curr_state);
       if (Button_Pressed(BUTTON_MODE) == 1)
         curr_state += 1;
       break;

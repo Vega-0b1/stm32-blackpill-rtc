@@ -1,6 +1,6 @@
 #include "ds3231.h"
 #include "button.h"
-#include "lcd.h"
+#include "oled.h"
 
 #define DS3231_ADDR (0x68 << 1)
 extern I2C_HandleTypeDef hi2c1;
@@ -48,7 +48,7 @@ void DS3231_adjust_hours(DS3231_Time *rtc, uint8_t *curr_state) {
   DS3231_Read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-  LCD_Print_Rtc(rtc, *curr_state);
+  OLED_Print_Rtc(rtc, *curr_state);
 
   if (Button_Pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
@@ -63,7 +63,7 @@ void DS3231_adjust_minutes(DS3231_Time *rtc, uint8_t *curr_state) {
   DS3231_Read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-  LCD_Print_Rtc(rtc, *curr_state);
+  OLED_Print_Rtc(rtc, *curr_state);
 
   if (Button_Pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
@@ -78,7 +78,7 @@ void DS3231_adjust_seconds(DS3231_Time *rtc, uint8_t *curr_state) {
   DS3231_Read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-  LCD_Print_Rtc(rtc, *curr_state);
+  OLED_Print_Rtc(rtc, *curr_state);
 
   if (Button_Pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
@@ -93,7 +93,7 @@ void DS3231_adjust_month(DS3231_Time *rtc, uint8_t *curr_state) {
   DS3231_Read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-  LCD_Print_Rtc(rtc, *curr_state);
+  OLED_Print_Rtc(rtc, *curr_state);
 
   if (Button_Pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
@@ -109,7 +109,7 @@ void DS3231_adjust_date(DS3231_Time *rtc, uint8_t *curr_state) {
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
 
-  LCD_Print_Rtc(rtc, *curr_state);
+  OLED_Print_Rtc(rtc, *curr_state);
   if (Button_Pressed(BUTTON_MODE) == 1) {
     *curr_state += 1;
   } else if (Button_Pressed(BUTTON_UP) == 1) {
@@ -137,10 +137,10 @@ void DS3231_adjust_year(DS3231_Time *rtc, uint8_t *curr_state) {
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
 
-  LCD_Print_Rtc(rtc, *curr_state);
+  OLED_Print_Rtc(rtc, *curr_state);
   if (Button_Pressed(BUTTON_MODE) == 1) {
     *curr_state = 0;
-    LCD_Clear();
+    OLED_Clear();
   } else if (Button_Pressed(BUTTON_UP) == 1) {
     rtc->year = (rtc->year + 1) % 100;
     DS3231_Write(rtc);
