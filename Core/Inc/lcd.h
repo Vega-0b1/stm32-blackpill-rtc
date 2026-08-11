@@ -2,8 +2,8 @@
 #include "ds3231.h"
 #include "stm32f4xx_hal.h"
 
-void LCD_Init(I2C_HandleTypeDef *hi2c);
-void LCD_SetCursor(uint8_t row, uint8_t col);
-void LCD_Print(const char *str);
-void LCD_Clear(void);
-void LCD_Print_Rtc(DS3231_Time *rtc, uint8_t curr_state);
+void lcd_init(I2C_HandleTypeDef *hi2c);
+void lcd_set_cursor(uint8_t row, uint8_t col);
+void lcd_print(const char *str);
+void lcd_clear(void);
+void lcd_print_rtc(ds3231_time_t *rtc, uint8_t curr_state);

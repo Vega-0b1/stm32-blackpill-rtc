@@ -3,5 +3,5 @@
 
 typedef enum { BUTTON_MODE, BUTTON_UP } Button_t;
 
-void Button_Init();
-uint8_t Button_Pressed(Button_t btn);
+void button_init();
+uint8_t button_pressed(Button_t btn);

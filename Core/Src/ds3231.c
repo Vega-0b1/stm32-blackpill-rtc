@@ -13,7 +13,7 @@ static uint8_t decimal_to_bcd(uint8_t dec) {
   return (dec / 10) << 4 | (dec % 10);
 }
 
-void DS3231_Read(DS3231_Time *time) {
+void ds3231_read(ds3231_time_t *time) {
   uint8_t buf[7];
   uint8_t reg = 0x00;
 
@@ -29,7 +29,7 @@ void DS3231_Read(DS3231_Time *time) {
   time->year = bcd_to_decimal(buf[6]);
 }
 
-void DS3231_Write(DS3231_Time *time) {
+void ds3231_write(ds3231_time_t *time) {
   uint8_t buf[8];
   buf[0] = 0x00;
   buf[1] = decimal_to_bcd(time->seconds);
@@ -43,76 +43,76 @@ void DS3231_Write(DS3231_Time *time) {
   HAL_I2C_Master_Transmit(&hi2c1, DS3231_ADDR, buf, 8, 100);
 }
 
-void DS3231_adjust_hours(DS3231_Time *rtc, uint8_t *curr_state) {
-  DS3231_Time temp;
-  DS3231_Read(&temp);
+void ds3231_adjust_hours(ds3231_time_t *rtc, uint8_t *curr_state) {
+  ds3231_time_t temp;
+  ds3231_read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-  OLED_Print_Rtc(rtc, *curr_state);
+  oled_print_rtc(rtc, *curr_state);
 
-  if (Button_Pressed(BUTTON_MODE) == 1)
+  if (button_pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
-  else if (Button_Pressed(BUTTON_UP) == 1) {
+  else if (button_pressed(BUTTON_UP) == 1) {
     rtc->hours = (rtc->hours + 1) % 24;
-    DS3231_Write(rtc);
+    ds3231_write(rtc);
   }
 }
 
-void DS3231_adjust_minutes(DS3231_Time *rtc, uint8_t *curr_state) {
-  DS3231_Time temp;
-  DS3231_Read(&temp);
+void ds3231_adjust_minutes(ds3231_time_t *rtc, uint8_t *curr_state) {
+  ds3231_time_t temp;
+  ds3231_read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-  OLED_Print_Rtc(rtc, *curr_state);
+  oled_print_rtc(rtc, *curr_state);
 
-  if (Button_Pressed(BUTTON_MODE) == 1)
+  if (button_pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
-  else if (Button_Pressed(BUTTON_UP) == 1) {
+  else if (button_pressed(BUTTON_UP) == 1) {
     rtc->minutes = (rtc->minutes + 1) % 60;
-    DS3231_Write(rtc);
+    ds3231_write(rtc);
   }
 }
 
-void DS3231_adjust_seconds(DS3231_Time *rtc, uint8_t *curr_state) {
-  DS3231_Time temp;
-  DS3231_Read(&temp);
+void ds3231_adjust_seconds(ds3231_time_t *rtc, uint8_t *curr_state) {
+  ds3231_time_t temp;
+  ds3231_read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-  OLED_Print_Rtc(rtc, *curr_state);
+  oled_print_rtc(rtc, *curr_state);
 
-  if (Button_Pressed(BUTTON_MODE) == 1)
+  if (button_pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
-  else if (Button_Pressed(BUTTON_UP) == 1) {
+  else if (button_pressed(BUTTON_UP) == 1) {
     rtc->seconds = 0;
-    DS3231_Write(rtc);
+    ds3231_write(rtc);
   }
 }
 
-void DS3231_adjust_month(DS3231_Time *rtc, uint8_t *curr_state) {
-  DS3231_Time temp;
-  DS3231_Read(&temp);
+void ds3231_adjust_month(ds3231_time_t *rtc, uint8_t *curr_state) {
+  ds3231_time_t temp;
+  ds3231_read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
-  OLED_Print_Rtc(rtc, *curr_state);
+  oled_print_rtc(rtc, *curr_state);
 
-  if (Button_Pressed(BUTTON_MODE) == 1)
+  if (button_pressed(BUTTON_MODE) == 1)
     *curr_state += 1;
-  else if (Button_Pressed(BUTTON_UP) == 1) {
+  else if (button_pressed(BUTTON_UP) == 1) {
     rtc->month = (rtc->month % 12) + 1;
-    DS3231_Write(rtc);
+    ds3231_write(rtc);
   }
 }
 
-void DS3231_adjust_date(DS3231_Time *rtc, uint8_t *curr_state) {
-  DS3231_Time temp;
-  DS3231_Read(&temp);
+void ds3231_adjust_date(ds3231_time_t *rtc, uint8_t *curr_state) {
+  ds3231_time_t temp;
+  ds3231_read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
 
-  OLED_Print_Rtc(rtc, *curr_state);
-  if (Button_Pressed(BUTTON_MODE) == 1) {
+  oled_print_rtc(rtc, *curr_state);
+  if (button_pressed(BUTTON_MODE) == 1) {
     *curr_state += 1;
-  } else if (Button_Pressed(BUTTON_UP) == 1) {
+  } else if (button_pressed(BUTTON_UP) == 1) {
     if (rtc->month == 2) {
       if (rtc->year % 4 == 0) {
         rtc->date = (rtc->date % 29) + 1;
@@ -127,22 +127,22 @@ void DS3231_adjust_date(DS3231_Time *rtc, uint8_t *curr_state) {
     } else {
       rtc->date = (rtc->date % 31) + 1;
     }
-    DS3231_Write(rtc);
+    ds3231_write(rtc);
   }
 }
 
-void DS3231_adjust_year(DS3231_Time *rtc, uint8_t *curr_state) {
-  DS3231_Time temp;
-  DS3231_Read(&temp);
+void ds3231_adjust_year(ds3231_time_t *rtc, uint8_t *curr_state) {
+  ds3231_time_t temp;
+  ds3231_read(&temp);
   rtc->seconds = temp.seconds;
   rtc->minutes = temp.minutes;
 
-  OLED_Print_Rtc(rtc, *curr_state);
-  if (Button_Pressed(BUTTON_MODE) == 1) {
+  oled_print_rtc(rtc, *curr_state);
+  if (button_pressed(BUTTON_MODE) == 1) {
     *curr_state = 0;
-    OLED_Clear();
-  } else if (Button_Pressed(BUTTON_UP) == 1) {
+    oled_clear();
+  } else if (button_pressed(BUTTON_UP) == 1) {
     rtc->year = (rtc->year + 1) % 100;
-    DS3231_Write(rtc);
+    ds3231_write(rtc);
   }
 }

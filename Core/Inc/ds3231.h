@@ -8,13 +8,13 @@ typedef struct {
   uint8_t date;
   uint8_t month;
   uint8_t year;
-} DS3231_Time;
+} ds3231_time_t;
 
-void DS3231_Read(DS3231_Time *time);
-void DS3231_Write(DS3231_Time *time);
-void DS3231_adjust_hours(DS3231_Time *rtc, uint8_t *curr_state);
-void DS3231_adjust_minutes(DS3231_Time *rtc, uint8_t *curr_state);
-void DS3231_adjust_seconds(DS3231_Time *rtc, uint8_t *curr_state);
-void DS3231_adjust_month(DS3231_Time *rtc, uint8_t *curr_state);
-void DS3231_adjust_date(DS3231_Time *rtc, uint8_t *curr_state);
-void DS3231_adjust_year(DS3231_Time *rtc, uint8_t *curr_state);
+void ds3231_read(ds3231_time_t *time);
+void ds3231_write(ds3231_time_t *time);
+void ds3231_adjust_hours(ds3231_time_t *rtc, uint8_t *curr_state);
+void ds3231_adjust_minutes(ds3231_time_t *rtc, uint8_t *curr_state);
+void ds3231_adjust_seconds(ds3231_time_t *rtc, uint8_t *curr_state);
+void ds3231_adjust_month(ds3231_time_t *rtc, uint8_t *curr_state);
+void ds3231_adjust_date(ds3231_time_t *rtc, uint8_t *curr_state);
+void ds3231_adjust_year(ds3231_time_t *rtc, uint8_t *curr_state);

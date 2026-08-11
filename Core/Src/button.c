@@ -1,6 +1,6 @@
 #include "button.h"
 
-void Button_Init() {
+void button_init() {
   __HAL_RCC_GPIOA_CLK_ENABLE();
   GPIO_InitTypeDef btn = {0};
   btn.Pin = GPIO_PIN_0 | GPIO_PIN_7;
@@ -9,7 +9,7 @@ void Button_Init() {
   HAL_GPIO_Init(GPIOA, &btn);
 }
 
-uint8_t Button_Pressed(Button_t btn) {
+uint8_t button_pressed(Button_t btn) {
   uint16_t pin = (btn == BUTTON_MODE) ? GPIO_PIN_0 : GPIO_PIN_7;
   return HAL_GPIO_ReadPin(GPIOA, pin) == GPIO_PIN_RESET ? 1 : 0;
 }
