@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="OpenOCD Flash + Debug" type="com.jetbrains.cidr.embedded.openocd.conf.OpenOcdConfigurationType" factoryName="com.jetbrains.cidr.embedded.openocd.conf.OpenOcdConfigurationFactory" PROGRAM_PARAMS="" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="BlackPill" TARGET_NAME="BlackPill" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="BlackPill" RUN_TARGET_NAME="BlackPill" DEBUGGER_ID="" GDB_PORT="3333" TELNET_PORT="4444" BOARD_CONFIG_FILE="$PROJECT_DIR$/openocd.cfg" DOWNLOAD_TYPE="ALWAYS" RESET_TYPE="INIT">
+    <method v="2">
+      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
