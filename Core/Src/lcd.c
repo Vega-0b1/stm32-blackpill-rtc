@@ -67,11 +67,11 @@ void lcd_print(const char *str) {
 void lcd_print_rtc(ds3231_time_t *rtc, uint8_t curr_state) {
   char buf[17];
   lcd_set_cursor(0, 0);
-  sprintf(buf, "%02d:%02d:%02d      M%d", rtc->hours, rtc->minutes,
+  snprintf(buf, sizeof buf, "%02d:%02d:%02d      M%d", rtc->hours, rtc->minutes,
           rtc->seconds, curr_state);
   lcd_print(buf);
 
   lcd_set_cursor(1, 0);
-  sprintf(buf, "%02d/%02d/%02d", rtc->month, rtc->date, rtc->year);
+  snprintf(buf, sizeof buf, "%02d/%02d/%02d", rtc->month, rtc->date, rtc->year);
   lcd_print(buf);
 }

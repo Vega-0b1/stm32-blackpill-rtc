@@ -23,12 +23,12 @@ void oled_print(const char *str) {
 void oled_print_rtc(ds3231_time_t *rtc, uint8_t curr_state) {
   char buf[17];
   oled_set_cursor(0, 0);
-  sprintf(buf, "%02d:%02d:%02d     M%d", rtc->hours, rtc->minutes, rtc->seconds,
+  snprintf(buf, sizeof buf, "%02d:%02d:%02d     M%d", rtc->hours, rtc->minutes, rtc->seconds,
           curr_state);
   oled_print(buf);
 
   oled_set_cursor(1, 0);
-  sprintf(buf, "%02d/%02d/%02d", rtc->month, rtc->date, rtc->year);
+  snprintf(buf, sizeof buf, "%02d/%02d/%02d", rtc->month, rtc->date, rtc->year);
   oled_print(buf);
   ssd1306_UpdateScreen();
 }
