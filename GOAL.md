@@ -15,6 +15,9 @@ alongside the clock.
 
 ## Notes
 
-- Design agreed for step 2: `aht20_status_t` enum, `aht20_data_t`
-  {float temperature, humidity}, `aht20_init(hi2c)` + `aht20_read(&out)`.
+- Design agreed for step 2: no status enum — both functions return
+  `HAL_StatusTypeDef`. `aht20_t` {float temperature, humidity},
+  `aht20_init(hi2c)` + `aht20_read(&out)`.
 - Step 2 sections: header, init, read, conversion.
+- Scope cut (2026-09-29): no calibration check. `aht20_init` only stores
+  the handle and waits out power-up; goal is a working reading first.
