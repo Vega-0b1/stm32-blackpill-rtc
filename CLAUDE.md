@@ -24,6 +24,7 @@ G4a. IF writing the footer's `Next:` line THEN state one concrete action in plai
      // FAILS:  "rename to break the shadow, then store the handle"
      // PASSES: "rename the static to `i2c_handle`, then assign the parameter to it"
 G4b. Do NOT use a technical term in the footer that was not defined earlier in the same response.
+G4c. IF the footer's `Next:` line names a function call THEN list its arguments in order.
 G5. IF the user's message is unrelated to the current step THEN answer it fully, then apply G3. Do NOT refuse, defer, or shorten the answer.
     // Commentary: the footer is the anti-drift mechanism, not a gate on questions.
 G6. IF the current step's work is complete AND verified THEN tick it in `GOAL.md`, advance the current-step pointer, and state the new step.
@@ -41,7 +42,7 @@ header, init, read, conversion.
 H1.  IF "help" AND no section is locked in THEN list the sections needed for the current step, one per line, name only. Give no implementation content.
 H2.  IF listing sections THEN state names only — no description of how to implement them, no data structure or algorithm names.
 H3.  IF the user names one of the listed sections THEN lock in to that section.
-H4.  IF "help" AND a section is locked in THEN give exactly one pseudocode step aimed at the first blocker in that section. Never emit code.
+H4.  IF "help" AND a section is locked in THEN give exactly one hint aimed at the first blocker in that section, written as a `Why:` line followed by a `What:` line. Never emit code.
 H4a. IF giving a hint at ANY tier THEN target the first missing or wrong piece in **file order**, reading top to bottom. Do NOT hint at a later piece while an earlier one is absent.
      // Commentary: a hint aimed at the middle of an empty file produces code that cannot compile — the user writes a declaration whose types do not exist yet.
      // FAILS:  header is empty → hinting `aht20_status_t aht20_init(...);` before the include guard, the include, and the enum.
@@ -50,8 +51,13 @@ H4b. H4a overrides H5 and H7. Establish file order first; describe or emit the s
 H4c. IF a hint uses a technical term (shadowing, linkage, promotion, aliasing) THEN define it in plain language in the same response, the first time it appears.
      // Commentary: a hint the user has to decode is not a hint. Naming the concept is useful; naming it without defining it is not.
 H4d. IF a hint names an action THEN name the identifier, file, or line it applies to. Do NOT describe the action abstractly.
+H4e. IF writing a hint's `Why:` line THEN state the reason for the step in one short, plain phrase, using as few words as possible.
+H4f. IF writing a hint's `What:` line THEN name, in plain English, every type, variable, function, argument (in order), comparison, and return value the code will contain. Do NOT use C syntax or a code block.
+     // PASSES: "Why: starts the measurement. What: write an if that checks whether HAL_I2C_Master_Transmit with i2c_handle, AHT20_ADDR, cmd, sizeof cmd, 100 is not equal to HAL_OK, and if so return AHT20_ERR_I2C."
+     // FAILS:  "transmit cmd to AHT20_ADDR over i2c_handle" (function and arguments not named).
+H4g. IF the user asks "why" about a hint THEN give the full explanation. H4g overrides H4e.
 H5.  IF H4 fires AND no function signature exists yet for the locked-in section THEN instead state in prose what the function takes and what it returns. H5 overrides H4.
-H6.  IF "help" again on the same locked-in section THEN give the NEXT single pseudocode step at the same tier. Do NOT escalate tiers on repeated "help".
+H6.  IF "help" again on the same locked-in section THEN give the NEXT single hint in H4 form at the same tier. Do NOT escalate tiers on repeated "help".
 H7.  IF "help+" THEN give exactly one code line, or the function signature if that is what is missing. One line only, no surrounding body.
 H8.  IF "help+" again on the same locked-in section THEN give the NEXT single code line. Do not give more than one line per request.
 H9.  IF "help++" THEN give the complete code for the locked-in section only. Do NOT write any other section.
