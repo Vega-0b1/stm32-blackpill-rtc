@@ -17,7 +17,10 @@ alongside the clock.
 
 - Design agreed for step 2: no status enum — both functions return
   `HAL_StatusTypeDef`. `aht20_t` {float temperature, humidity},
-  `aht20_init(hi2c)` + `aht20_read(&out)`.
+  `aht20_init(hi2c)` + `aht20_read(hi2c, &out)`.
+- Design change (2026-09-29): no file-scope static handle. Every function
+  takes the I2C handle as a parameter, so several sensors can each be
+  driven through their own bus.
 - Step 2 sections: header, init, read, conversion.
 - Scope cut (2026-09-29): no calibration check. `aht20_init` only stores
   the handle and waits out power-up; goal is a working reading first.
