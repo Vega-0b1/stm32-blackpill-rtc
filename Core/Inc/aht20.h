@@ -8,7 +8,7 @@ typedef struct{
 }aht20_t;
 
 HAL_StatusTypeDef aht20_init(I2C_HandleTypeDef *hi2c);
-HAL_StatusTypeDef aht20_read(I2C_HandleTypeDef *hi2c, aht20_t *out);
+HAL_StatusTypeDef aht20_read(I2C_HandleTypeDef *hi2c, aht20_t *measurement);
 
 
 

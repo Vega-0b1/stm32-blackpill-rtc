@@ -24,7 +24,7 @@
 #include "button.h"
 #include "ds3231.h"
 #include "oled.h"
-#include <stdio.h>
+#include "aht20.h"
 
 /* USER CODE END Includes */
 
@@ -48,6 +48,7 @@ I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
 ds3231_time_t rtc;
+aht20_t measurement;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -108,8 +109,9 @@ int main(void)
 
   button_init();
   oled_init(&hi2c1);
-
   uint8_t curr_state = 0;
+  aht20_init(&hi2c1);
+   
 
   /* USER CODE END 2 */
 

@@ -9,7 +9,7 @@ HAL_StatusTypeDef aht20_init(I2C_HandleTypeDef *hi2c){
     return HAL_I2C_IsDeviceReady(hi2c, AHT20_ADDR, 3, 100);
 }
 
-HAL_StatusTypeDef aht20_read(I2C_HandleTypeDef *hi2c, aht20_t *out){
+HAL_StatusTypeDef aht20_read(I2C_HandleTypeDef *hi2c, aht20_t *measurement){
     uint8_t cmds[3] = {0xAC, 0x33, 0x00};
     HAL_StatusTypeDef status = HAL_I2C_Master_Transmit(hi2c, AHT20_ADDR, cmds, sizeof cmds, 100);
 
@@ -28,4 +28,9 @@ HAL_StatusTypeDef aht20_read(I2C_HandleTypeDef *hi2c, aht20_t *out){
 
     uint32_t raw_hum = (data[1] << 12 | data[2]<< 4 | data[3] >> 4);
     uint32_t raw_temp = ( (data[3] & 0xF) << 16 | data[4] << 8 | data[5] );
+
+    measurement->humidity = (raw_hum / 1048576.0f) * 100.0f;
+    measurement->temperature = (raw_temp / 1048576.0f) * 200.0f - 50.0f;
+
+    return HAL_OK;
 }
