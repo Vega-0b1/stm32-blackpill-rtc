@@ -125,6 +125,8 @@ int main(void)
     switch (curr_state) {
     case 0:
       ds3231_read(&rtc);
+      aht20_read(&hi2c1,&measurement);
+
       if (rtc.hours == 0 && rtc.minutes == 0 && rtc.seconds == 0) {
 
         if (rtc.month == 2) {

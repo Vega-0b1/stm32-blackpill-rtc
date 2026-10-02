@@ -1,5 +1,6 @@
 #pragma once
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_def.h"
 
 typedef struct {
   uint8_t seconds;
@@ -10,11 +11,15 @@ typedef struct {
   uint8_t year;
 } ds3231_time_t;
 
-void ds3231_read(ds3231_time_t *time);
-void ds3231_write(ds3231_time_t *time);
-void ds3231_adjust_hours(ds3231_time_t *rtc, uint8_t *curr_state);
-void ds3231_adjust_minutes(ds3231_time_t *rtc, uint8_t *curr_state);
-void ds3231_adjust_seconds(ds3231_time_t *rtc, uint8_t *curr_state);
-void ds3231_adjust_month(ds3231_time_t *rtc, uint8_t *curr_state);
-void ds3231_adjust_date(ds3231_time_t *rtc, uint8_t *curr_state);
-void ds3231_adjust_year(ds3231_time_t *rtc, uint8_t *curr_state);
+typedef enum{
+  DS3231_FIELD_SECONDS,
+  DS3231_FIELD_MINUTES,
+  DS3231_FIELD_HOURS,
+  DS3231_FIELD_DATE,
+  DS3231_FIELD_MONTH,
+  DS3231_FIELD_YEAR
+}ds3231_field_t;
+
+HAL_StatusTypeDef ds3231_read(I2C_HandleTypeDef *hi2c, ds3231_time_t *time);
+HAL_StatusTypeDef ds3231_write(I2C_HandleTypeDef *hi2c,ds3231_time_t *time);
+void ds3231_increment(ds3231_time_t *time, ds3231_field_t field);
