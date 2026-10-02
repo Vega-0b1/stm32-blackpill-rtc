@@ -10,6 +10,23 @@ static uint8_t decimal_to_bcd(uint8_t dec) {
   return (dec / 10) << 4 | (dec % 10);
 }
 
+static uint8_t days_in_month(const ds3231_time_t *time){
+  uint8_t m = time->month;
+
+  if(m == 2){
+    if(time->year % 4)
+      return 28;
+    else
+      return 29;
+  }
+
+  if(m == 4 || m == 6 || m == 9 || m == 11 )
+    return 30;
+  else
+    return 31;
+
+}
+
 HAL_StatusTypeDef ds3231_read(I2C_HandleTypeDef *hi2c, ds3231_time_t *time) {
   uint8_t buf[7] = {0};
   uint8_t reg = 0x00;
@@ -62,6 +79,22 @@ void ds3231_increment(ds3231_time_t *time, ds3231_field_t field){
       time->hours = (time->hours + 1) % 24;
       break;
     case DS3231_FIELD_DATE:
+      time->date = (time->date % days_in_month(time)) + 1;
+      break;
+    case DS3231_FIELD_MONTH:
+      if(time->month != 12)
+        time->month = time->month + 1;
+      else
+        time->month = 1;
+      if (time->date > days_in_month(time))
+        time->date = days_in_month(time);
+      break;
+    case DS3231_FIELD_YEAR:
+      time->year = (time->year + 1) % 100;
+      if (time->date > days_in_month(time))
+        time->date = days_in_month(time);
+      break;
+
   
   }
 }

@@ -49,6 +49,7 @@ I2C_HandleTypeDef hi2c1;
 /* USER CODE BEGIN PV */
 ds3231_time_t rtc;
 aht20_t measurement;
+const ds3231_field_t edit_order[] = {DS3231_FIELD_HOURS, DS3231_FIELD_MINUTES,DS3231_FIELD_SECONDS,DS3231_FIELD_MONTH, DS3231_FIELD_DATE, DS3231_FIELD_YEAR};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -124,68 +125,27 @@ int main(void)
     /* USER CODE BEGIN 3 */
     switch (curr_state) {
     case 0:
-      ds3231_read(&rtc);
+      ds3231_read(&hi2c1, &rtc);
       aht20_read(&hi2c1,&measurement);
-
-      if (rtc.hours == 0 && rtc.minutes == 0 && rtc.seconds == 0) {
-
-        if (rtc.month == 2) {
-          if (rtc.year % 4 == 0 && rtc.date > 29) {
-            rtc.month = 3;
-            rtc.date = 1;
-            ds3231_write(&rtc);
-          } else if (rtc.date > 28) {
-            rtc.month = 3;
-            rtc.date = 1;
-            ds3231_write(&rtc);
-          }
-        } else if (rtc.month == 4 || rtc.month == 6 || rtc.month == 9 ||
-                   rtc.month == 11) {
-          if (rtc.date > 30) {
-            rtc.month += 1;
-            rtc.date = 1;
-            ds3231_write(&rtc);
-          }
-
-        } else {
-          if (rtc.month == 12 && rtc.date > 31) {
-            rtc.month = 1;
-            rtc.date = 1;
-            ds3231_write(&rtc);
-          } else if (rtc.date > 31) {
-            rtc.month += 1;
-            rtc.date = 1;
-            ds3231_write(&rtc);
-          }
-        }
-      }
       oled_print_rtc(&rtc, curr_state);
+
       if (button_pressed(BUTTON_MODE) == 1)
         curr_state += 1;
       break;
+    default:
+      ds3231_read(&hi2c1, &rtc);
+      oled_print_rtc(&rtc, curr_state);
+      if(button_pressed(BUTTON_MODE) == 1){
+        curr_state += 1;
+        if(curr_state > 6){
+          curr_state = 0;
+          oled_clear();
+        }
+      } else if (button_pressed(BUTTON_UP) == 1) {
+        ds3231_increment(&rtc, edit_order[curr_state-1]);
+        ds3231_write(&hi2c1, &rtc);
 
-    case 1:
-      ds3231_adjust_hours(&rtc, &curr_state);
-      break;
-
-    case 2:
-      ds3231_adjust_minutes(&rtc, &curr_state);
-      break;
-
-    case 3:
-      ds3231_adjust_seconds(&rtc, &curr_state);
-      break;
-
-    case 4:
-      ds3231_adjust_month(&rtc, &curr_state);
-      break;
-    case 5:
-      ds3231_adjust_date(&rtc, &curr_state);
-      break;
-
-    case 6:
-      ds3231_adjust_year(&rtc, &curr_state);
-      break;
+      }
     }
   }
 

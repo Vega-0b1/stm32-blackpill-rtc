@@ -3,14 +3,14 @@
 Read the AHT20 (0x38) and BMP280 (0x77) and display their values on the OLED
 alongside the clock.
 
-**Current step: 4 of 8**
+**Current step: 5 of 8**
 
 - [x] 1. Bus scan — confirm addresses
       Found: AHT20 0x38, OLED 0x3C, AT24C32 0x57, DS3231 0x68, BMP280 0x77
 - [x] 2. AHT20 driver — `aht20.h/.c`, init + read
 - [x] 3. Wire AHT20 into `main.c`
-- [ ] 4. DS3231 refactor — modular driver      ← current
-- [ ] 5. OLED display integration (AHT20)
+- [x] 4. DS3231 refactor — modular driver
+- [ ] 5. OLED display integration (AHT20)      ← current
 - [ ] 6. BMP280 driver — id check, calibration, compensation
 - [ ] 7. Wire BMP280 into `main.c` + OLED
 - [ ] 8. Update CLAUDE.md module status
@@ -48,3 +48,7 @@ alongside the clock.
   `ds3231_edit.h/.c` are not needed — delete them.
   Enum order is struct order and carries no meaning; the edit order is
   main's choice, kept as its own array of `ds3231_field_t` in screen order.
+- Step 4 done (2026-10-02): verified by a clean `cmake --build build/Debug`.
+  Not yet run on hardware. UP on seconds now increments (wraps at 60)
+  instead of the old reset-to-0. The plain `make` Makefile is stale: it
+  does not list the app sources and fails to link; CMake is the build.
