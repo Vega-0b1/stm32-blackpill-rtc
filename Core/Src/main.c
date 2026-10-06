@@ -126,7 +126,8 @@ int main(void)
     switch (curr_state) {
     case 0:
       ds3231_read(&hi2c1, &rtc);
-      aht20_read(&hi2c1,&measurement);
+      if (aht20_read(&hi2c1, &measurement) == HAL_OK)
+        oled_print_aht20(&measurement);
       oled_print_rtc(&rtc, curr_state);
 
       if (button_pressed(BUTTON_MODE) == 1)
