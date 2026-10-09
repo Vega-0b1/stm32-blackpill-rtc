@@ -50,6 +50,8 @@ I2C_HandleTypeDef hi2c1;
 ds3231_time_t rtc;
 aht20_t measurement;
 const ds3231_field_t edit_order[] = {DS3231_FIELD_HOURS, DS3231_FIELD_MINUTES,DS3231_FIELD_SECONDS,DS3231_FIELD_MONTH, DS3231_FIELD_DATE, DS3231_FIELD_YEAR};
+button_t up_btn;
+button_t mode_btn;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -108,7 +110,8 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
-  button_init();
+  button_init(&mode_btn, GPIOA, GPIO_PIN_0);
+  button_init(&up_btn, GPIOA, GPIO_PIN_7);
   oled_init(&hi2c1);
   uint8_t curr_state = 0;
   aht20_init(&hi2c1);
